@@ -1,0 +1,303 @@
+_______________________________________newton forward / backward __________________
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+float a[15][15];
+float x,u1,u,y;
+int i,j,n,fact;
+
+
+cout<<"Enter no. of terms\n";
+ cin>>n;
+
+cout<<"FOR X \n ";
+
+for( int i = 0; i <n ; i++)
+{
+    cin>>a[i][0];
+
+}
+
+
+cout<<"FOR Y \n ";
+
+for( int i= 0 ;  i <n ; i++)
+{
+    cin>>a[i][1];
+
+}
+
+
+for( int j = 2 ; j <n+1 ; j++)
+{
+
+    for( int i=0; i<n-j+1 ; i++  )
+    {
+        a[i][j] = a[i+1][j-1] - a[i][j-1];
+    }
+
+}
+
+
+  cout<<"The Difference Table is as follows:\n";
+    for( int i=0;i<n;i++)
+    {
+     for(int j=0;j<=n-i;j++)
+      cout<<" "<<a[i][j];
+     cout<<"\n";
+    }
+
+
+    cout<<"enter the value of X = ";
+    cin>>x;
+
+
+
+    cout<< " for  Forward Differnece \n ";
+    u= (x - a[0][0])/(a[1][0]-a[0][0]);
+    y=a[0][1];
+    u1=u;
+    fact=1;
+    for(i=2;i<=n;i++)
+    {
+        y=y+(u1*a[0][i])/fact;
+        fact=fact*i;
+        u1=u1*(u-(i-1));
+    }
+    cout<<" \n Value at give X is  = "<<y;
+
+
+
+
+cout<<" \n for  Backward Differnece";
+ u= (x - a[n-1][0])/(a[1][0]-a[0][0]);
+    y=a[n-1][1];
+    u1=u;
+    fact=1;
+    j=2;
+    for(i=n-2;i>=0;i--)
+    {
+        y=y+(u1*a[i][j])/fact;
+        fact=fact*j;
+        u1=u1*(u+(j-1));
+        j++;
+    }
+ cout<<"\nValue at give X is "<<y;
+
+
+
+______________________Secant method ____________________--
+#include <iostream>
+#include<math.h>
+
+using namespace std;
+
+float f( float x)
+{
+    return (x*x*x-2*x-5);
+}
+
+int main()
+{
+    float  x1,x2,x0;
+     int n = 0 ;
+     top:
+    cout<<"enter initial guess " ;
+     cin>>x1>>x2;
+     if (f(x1) * f(x2) < 0) {
+        do {
+
+            x0 = (x1 * f(x2) - x2 * f(x1)) / (f(x2) - f(x1));
+            x1 = x2;
+            x2 = x0;
+            n++;
+        }
+        while (n<8);
+        cout << "Root = " << x0 << endl;
+    } else
+        cout << " \n next guess";
+        goto top;
+}
+
+
+_____________________  Falsee ___________
+
+
+#include <iostream>
+#include<math.h>
+
+using namespace std;
+
+float f( float x)
+{
+    return (x*x*x -x*2 - 5);
+
+}
+
+int main()
+{
+    float  x1,x2,x0;
+     top:
+    cout<<"enter initial guess " ;
+     cin>>x1>>x2;
+     if (f(x1) * f(x2) < 0) {
+        do {
+            x0 = (x1 * f(x2) - x2 * f(x1)) / (f(x2) - f(x1));
+       if(f(x0)*f(x2)<0)
+        {
+            x2 = x0;
+        }
+        else
+        {
+                x1 = x0;
+        }
+        }
+        while (fabs(f(x2))>0.001);
+        cout << "Root = " << x0 << endl;
+    } else
+        cout << " \n next guess";
+        goto top;
+
+}
+
+_________________________________________Bisection method_______________
+
+
+
+#include <iostream>
+#include<math.h>
+
+using namespace std;
+
+float f( float x)
+{
+return (x*x*x +x*x - 3*x - 3);
+
+}
+
+int main()
+{
+float  x1,x2,x0;
+top:
+cout<<"enter initial guess " ;
+cin>>x1>>x2;
+if (f(x1) * f(x2) < 0) {
+
+while (x2-x1>=0.001)
+{
+x0 = (x1+x2)/2;
+
+if(f(x0)*f(x2)<0)
+{
+x1 = x0;
+}
+else
+{
+x2= x0;
+}
+}
+
+cout << "Root = " << x0 << endl;
+}
+ else
+ {
+     cout << " \n next guess";
+    goto top;
+ }
+
+
+}
+
+
+_____________________________Newton Rapson____________
+
+
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+
+float fn(float x)
+{   
+     return  pow(x,2)+(3*x)+1 ;
+}
+float de(float x)
+{   
+     return  2*x + 3 ;
+}
+int main()
+{   float a,e=0,z;
+    cout<<"Enter Number ";
+    cin>>a;
+    do
+    {   e++;
+        z=a-(fn(a)/de(a));
+        cout<<"The iterative "<<e<<" root is "<<z;    
+        a=z;
+        cout<<endl;
+    }while(abs(fn(z))>0.001);
+    return 0;
+}
+
+_____________________________________fixed point __________________
+
+
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+#include<stdlib.h>
+
+#define E 0.00001
+#define g(x) 2-x*x
+
+int main()
+{
+ float x1,x2;
+ 
+ printf("Enter the initial guess : ");
+ scanf("%f",&x1);
+ 
+ Lbl:
+  x2=g(x1);
+  if(((x2-x1)/x2)<E)
+  {
+   printf("The root is %f",x2);
+   goto End;
+  }
+  else
+      {
+    x1=x2;
+    goto Lbl;
+   }
+ End:
+  getch();
+  return(0);
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
